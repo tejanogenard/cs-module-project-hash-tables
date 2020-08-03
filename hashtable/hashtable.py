@@ -20,8 +20,9 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
-        # Your code here
+    def __init__(self, capacity = MIN_CAPACITY):
+        self.capacity = capacity
+        self.buckets = [None] * self.capacity
 
 
     def get_num_slots(self):
@@ -35,6 +36,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+    
+        return len(self.buckets)
 
 
     def get_load_factor(self):
@@ -63,6 +66,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for c in key:
+          hash = (hash * 33) + ord(c)
+        return hash
 
 
     def hash_index(self, key):
@@ -70,6 +77,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
+    
         #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
@@ -82,6 +90,10 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        item = HashTableEntry(key, value)
+        index = self.hash_index(item.key)
+        self.buckets[index] = item
+        
 
 
     def delete(self, key):
@@ -93,6 +105,12 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+
+        if self.buckets[index]:
+            self.buckets[index] = None
+        else:
+            print("not found")
 
 
     def get(self, key):
@@ -104,6 +122,12 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        if self.buckets[index]:
+            return self.buckets[index].value
+        else:
+            return None
+        
 
 
     def resize(self, new_capacity):
@@ -120,6 +144,7 @@ class HashTable:
 if __name__ == "__main__":
     ht = HashTable(8)
 
+
     ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
     ht.put("line_3", "All mimsy were the borogoves,")
@@ -134,6 +159,7 @@ if __name__ == "__main__":
     ht.put("line_12", "And stood awhile in thought.")
 
     print("")
+
 
     # Test storing beyond capacity
     for i in range(1, 13):
@@ -151,3 +177,6 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
+
+
+
