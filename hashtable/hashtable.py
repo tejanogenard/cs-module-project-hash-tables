@@ -23,6 +23,9 @@ class HashTable:
     def __init__(self, capacity = MIN_CAPACITY):
         self.capacity = capacity
         self.buckets = [None] * self.capacity
+        self.size = 0  
+
+
 
 
     def get_num_slots(self):
@@ -93,7 +96,6 @@ class HashTable:
         item = HashTableEntry(key, value)
         index = self.hash_index(item.key)
         self.buckets[index] = item
-        
 
 
     def delete(self, key):
@@ -123,8 +125,18 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        if self.buckets[index]:
-            return self.buckets[index].value
+        node = self.buckets[index]
+
+        # iterate through the hash index  
+        while node is not None and node.key != key:
+            node = node.next 
+
+        # return none if node is not found 
+        if node is None:
+            return None 
+
+        # else lets return our value 
+
         else:
             return None
         
@@ -138,6 +150,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        #resize our hash with the new cap 
+        self.capacity = new_capacity
+        #store the old hash data 
+        old_buckets = self.buckets
+        # create new hash with new cap 
+        self.buckets = [None] * new_capacity
+        # rehash elements into the new table 
+        for i in range(len(old_buckets)):
+            old_hash = old_buckets[i]
 
 
 
