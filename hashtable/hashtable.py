@@ -49,7 +49,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        return self.size / self.capacity
 
 
     def fnv1(self, key):
@@ -60,6 +60,7 @@ class HashTable:
         """
 
         # Your code here
+        return hash(key)
 
 
     def djb2(self, key):
@@ -81,7 +82,7 @@ class HashTable:
         between within the storage capacity of the hash table.
         """
     
-        #return self.fnv1(key) % self.capacity
+        # return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
@@ -93,9 +94,25 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        item = HashTableEntry(key, value)
-        index = self.hash_index(item.key)
-        self.buckets[index] = item
+        index = self.hash_index(key)    
+
+        if not self.buckets[index]:
+            self.buckets[index] = HashTableEntry(key, value)
+ 
+
+        else: 
+            cur = self.buckets[index]
+            while cur.next is not None and cur.key != key:
+                cur = cur.next 
+                
+            if cur.key is key: 
+                cur.value = value
+            
+            else:
+                cur.next = HashTableEntry(key, value)
+         
+        self.size += 1 
+     
 
 
     def delete(self, key):
@@ -127,18 +144,24 @@ class HashTable:
         index = self.hash_index(key)
         node = self.buckets[index]
 
-        # iterate through the hash index  
-        while node is not None and node.key != key:
-            node = node.next 
 
-        # return none if node is not found 
         if node is None:
             return None 
-
-        # else lets return our value 
-
+        
+        if node.key == key:
+            return node.value 
+            
         else:
-            return None
+            cur = self.buckets[index]
+            while cur.next is not None:
+                if key == cur.key:
+                    return cur.value 
+
+                cur = cur.next 
+            return None 
+
+ 
+
         
 
 
@@ -166,18 +189,31 @@ if __name__ == "__main__":
     ht = HashTable(8)
 
 
-    ht.put("line_1", "'Twas brillig, and the slithy toves")
-    ht.put("line_2", "Did gyre and gimble in the wabe:")
-    ht.put("line_3", "All mimsy were the borogoves,")
-    ht.put("line_4", "And the mome raths outgrabe.")
-    ht.put("line_5", '"Beware the Jabberwock, my son!')
-    ht.put("line_6", "The jaws that bite, the claws that catch!")
-    ht.put("line_7", "Beware the Jubjub bird, and shun")
-    ht.put("line_8", 'The frumious Bandersnatch!"')
-    ht.put("line_9", "He took his vorpal sword in hand;")
-    ht.put("line_10", "Long time the manxome foe he sought--")
-    ht.put("line_11", "So rested he by the Tumtum tree")
-    ht.put("line_12", "And stood awhile in thought.")
+    # ht.put("line_1", "'Twas brillig, and the slithy toves")
+    # ht.put("line_2", "Did gyre and gimble in the wabe:")
+    # ht.put("line_3", "All mimsy were the borogoves,")
+    # ht.put("line_4", "And the mome raths outgrabe.")
+    # ht.put("line_5", '"Beware the Jabberwock, my son!')
+    # ht.put("line_6", "The jaws that bite, the claws that catch!")
+    # ht.put("line_7", "Beware the Jubjub bird, and shun")
+    # ht.put("line_8", 'The frumious Bandersnatch!"')
+    # ht.put("line_9", "He took his vorpal sword in hand;")
+    # ht.put("line_10", "Long time the manxome foe he sought--")
+    # ht.put("line_11", "So rested he by the Tumtum tree")
+    # ht.put("line_12", "And stood awhile in thought.")
+
+
+    ht.put("key-0", "val-0")
+    ht.put("key-1", "val-1")
+    ht.put("key-2", "val-2")
+    ht.put("key-3", "val-3")
+    ht.put("key-4", "val-4")
+    ht.put("key-5", "val-5")
+    ht.put("key-6", "val-6")
+    ht.put("key-7", "val-7")
+    ht.put("key-8", "val-8")
+    ht.put("key-9", "val-9")
+
 
     print("")
 
