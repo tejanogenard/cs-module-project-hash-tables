@@ -82,3 +82,20 @@ full-featured.)
 * [Cracking Caesar Ciphers](applications/crack_caesar/)
 * [Sum and Difference](applications/sumdiff/)
 
+
+What General Problem Hash Tables SOlve 
+-----------------------------------------
+
+They can look up things fast, in O(1) time.
+
+Applications
+-------------
+
+* In lieu of linear search. 
+If the number of elements is small, it doesn't matter what data structure you used. 
+
+* Memoization 
+    * Chaching Store the results of an expensive calculation so you don't have      to recompute it later 
+
+* Network Cache 
+

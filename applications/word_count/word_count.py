@@ -1,7 +1,16 @@
 def word_count(s):
     # Your code here
+    cache = {}
+    ignore = {"\"", ':', ";", ",", ".", '-', "+", '=', '/', '\\', "|", "[", "]", '{', '}', '(', ')', '*', '^', '&', '\'\''}
+    string = s.split()
 
-
+    for word in string:
+        word = word.lower()
+        if word not in cache:
+            cache[word] = 1
+        else:
+            cache[word] += 1
+    return cache 
 
 if __name__ == "__main__":
     print(word_count(""))
