@@ -107,10 +107,26 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        if self.buckets[index]: 
-            return self.buckets[index].value 
+        entryNode = self.buckets[index]
+
+        # if the Node is not in the hash
+        if entryNode is None:
+            return None 
+
+        # if the key is found 
+        if entryNode.key == key:
+            return entryNode.value
+
         else:
-            return None
+            curr = self.buckets.index
+            while curr.next is not None:
+                if key == curr.key:
+                    return curr.value 
+
+                    curr = curr.next 
+                return None 
+
+
 
 
     def resize(self, new_capacity):
