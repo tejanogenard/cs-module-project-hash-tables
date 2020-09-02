@@ -19,7 +19,7 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
+    def __init__(self, capacity = MIN_CAPACITY):
         self.capacity = capacity
         self.buckets = [None] * self.capacity 
         self.size = 0 
@@ -79,10 +79,25 @@ class HashTable:
         Hash collisions should be handled with Linked List Chaining.
         Implement this.
         """
-        # Your code here
-        item = HashTableEntry(key, value)
-        index = self.hash_index(item.key)
-        self.buckets[index] = item
+        
+        index = self.hash_index(key)    
+
+        if not self.buckets[index]:
+            self.buckets[index] = HashTableEntry(key, value)
+ 
+        else: 
+            cur = self.buckets[index]
+            while cur.next is not None and cur.key != key:
+                cur = cur.next 
+                
+            if cur.key is key: 
+                cur.value = value
+            
+            else:
+                cur.next = HashTableEntry(key, value)
+         
+        self.size += 1 
+
 
 
     def delete(self, key):
@@ -93,11 +108,34 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
+        node = self.buckets[index]
         
-        if self.buckets[index]:
-            self.buckets[index] = None 
-        else:
-            print("Item not found")
+        if node.key == key:
+            old_node = node
+
+            self.buckets[index] = node.next
+
+            self.size -= 1
+            return old_node.value
+        
+
+        prev = node
+        cur = node.next
+
+        while cur is not None:
+
+            if cur.key == key:
+
+                prev.next = cur.next
+
+                self.size -= 1
+                return cur.value
+
+            prev = prev.next
+            cur = cur.next
+
+        # if the given key is not found, return None
+        return None
 
 
     def get(self, key):
@@ -107,25 +145,27 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        entryNode = self.buckets[index]
+        node = self.buckets[index]
 
-        # if the Node is not in the hash
-        if entryNode is None:
+
+        if node is None:
+            return None 
+        
+        if node.key == key:
+            return node.value 
+            
+        else:
+            cur = self.buckets[index]
+            while cur.next is not None:
+                if key == cur.key:
+                    return cur.value 
+
+                cur = cur.next 
             return None 
 
-        # if the key is found 
-        if entryNode.key == key:
-            return entryNode.value
+ 
 
-        else:
-            curr = self.buckets.index
-            while curr.next is not None:
-                if key == curr.key:
-                    return curr.value 
-
-                    curr = curr.next 
-                return None 
-
+        
 
 
 
@@ -135,12 +175,24 @@ class HashTable:
         rehashes all key/value pairs.
         Implement this.
         """
-        # Your code here
+        self.capacity = new_capacity
+
+        old_buckets = self.buckets 
+
+        self.buckets = [None] * new_capacity
+
+        for i in range(len(old_buckets)):
+            old_table = old_buckets[i]
+        
+            while old_table:
+                self.put(old_table.key, old_table.value)
+                old_table = old_table.next 
+
 
 
 
 if __name__ == "__main__":
-    ht = HashTable(8)
+    ht = HashTable(13)
 
     ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
